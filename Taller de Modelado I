@@ -1,0 +1,254 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+--
+
+##**Ejemplo 1**
+
+El **modelo de crecimiento geométrico** describe
+
+--
+
+range(10)
+
+--
+
+list(range(10))
+
+--
+
+P0 = 5000
+r = 0.03
+años= 10
+
+población = []
+
+for t in range(años + 1):
+  P = P0 * (1 + r)**t
+  población.append(P)
+
+población
+
+--
+
+df = pd.DataFrame({
+    "Año": range(años + 1),
+    "Población estimada": población
+})
+
+df
+
+--
+
+plt.plot(df["Año"], df["Población estimada"], marker="*", color= 'blue')
+plt.xlabel("Año")
+plt.ylabel("Población estimada")
+plt.title("Modelo de crecimiento poblacional")
+plt.grid()
+plt.show()
+
+--
+
+tasas = [0.01, 0.03, 0.05]
+for r in tasas:
+  población = []
+  for t in range(años + 1):
+    P = P0 * (1 + r)**t
+    población.append(P)
+  plt.plot(range(años + 1), población, marker="*", label=f"r = {r}")
+
+plt.xlabel("Año")
+plt.ylabel("Población estimada")
+plt.title("Comparación de Escenarios")
+plt.legend()
+plt.grid()
+plt.show()
+
+--
+
+# Parámetros del modelo
+
+T0 = 90
+Ta = 25
+k = 0.08
+tiempo_total = 60
+
+
+tiempos = np.arange(0, tiempo_total + 1)
+temperaturas = []
+
+#Condición inicial
+T = T0
+
+# Simulación
+for t in tiempos:
+  temperaturas.append(T)
+  T = T - k * (T - Ta)
+
+df = pd.DataFrame({
+    "Tiempo (min)": tiempos,
+    "Temperatura (°C)": temperaturas
+})
+
+df
+
+--
+
+plt.figure(figsize=(8, 5))
+
+plt.plot(df["Tiempo (min)"], df["Temperatura (°C)"], marker="*", markersize=3, color= 'green')
+
+plt.axhline(y=Ta, linestyle="--", label="Temperatura ambiente")
+
+plt.xlabel("Tiempo (min)")
+plt.ylabel("Temperatura (°C)")
+plt.title("Modelo discreto de enfriamiento")
+plt.legend()
+plt.grid()
+
+plt.show()
+
+--
+
+ks = [0.03, 0.08, 0.15]
+
+plt.figure(figsize =(8, 5))
+
+for k in ks:
+  T = T0
+  temperaturas = []
+
+  for t in tiempos:
+    temperaturas.append(T)
+    T = T - k * (T - Ta)
+
+  plt.plot(tiempos, temperaturas, marker="*", markersize=3, label=f"k = {k}")
+
+plt.axhline(y=Ta, linestyle="--", label="Temperatura ambiente")
+
+plt.xlabel("Tiempo (min)")
+plt.ylabel("Temperatura (°C)")
+plt.title("Comparación de Escenarios de Enfriamiento")
+plt.legend()
+plt.grid()
+
+plt.show()
+
+--
+
+# Parámetros del modlo
+P0 = 100
+r = 0.15
+K = 1000
+n = 60
+
+tiempos = np.arange(0, n + 1)
+
+población = []
+
+P = P0
+
+for t in tiempos:
+  población.append(P)
+  P = P + r * P * (1 - P / K)
+
+df = pd.DataFrame({
+    "Tiempo": tiempos,
+    "Población": población
+})
+
+df
+
+--
+
+plt.figure(figsize=(8, 5))
+
+plt.plot(df["Tiempo"], df["Población"], marker="*", markersize=3, color='blue')
+plt.axhline(y=K, linestyle="--", label="Capacidad de Carga K")
+
+plt.xlabel("Tiempo")
+plt.ylabel("Población")
+plt.title("Modelo logístico de crecimiento poblacional")
+plt.legend()
+plt.grid()
+
+plt.show()
+
+--
+
+P0 = 100
+r = 0.15
+K = 1000
+n = 60
+
+tiempos = np.arange(0, n + 1)
+
+#Simulación exponencial
+P_exp = P0
+población_exp = []
+
+for t in tiempos:
+  población_exp.append(P_exp)
+  P_exp = P_exp + r * P_exp
+
+#Simulación logística
+P_log = P0
+población_log = []
+
+for t in tiempos:
+  población_exp.append(P_log)
+  P_log = P_log + r * P_log * (1 - P_log / K)
+
+#Gráfica comparativa
+plt.figure(figsize=(8, 5))
+
+plt.plot(tiempos, población_exp, marker="*", markersize=3, label="Exponencial")
+plt.plot(tiempos, población_log, marker="s", markersize=3, label="Logístico")
+plt.axhline(y=K, linestyle="--", label="Capacidad de Carga K", color='green')
+
+#plt.xlim(0, 50)
+plt.xlabel("Tiempo")
+plt.ylabel("Población")
+plt.title("Comparación entre crecimiento exponencial y logístico")
+plt.legend()
+plt.grid()
+
+plt.show()
+
+--
+
+P0 = 100
+K = 1000
+n = 60
+
+tasas = [0.05, 0.15, 0.30]
+tiempos = np.arange(0, n + 1)
+
+plt.figure(figsize=(8, 5))
+
+for r in tasas:
+  P = P0
+  población = []
+
+  for t in tiempos:
+    población.append(P)
+    P = P + r * P * (1 - P / K)
+
+  plt.plot(tiempos, población, marker="*", markersize=3, label=f"r = {r}")
+
+plt.axhline(y=K, linestyle="--", label="Capacidad de Carga K", color='black')
+
+plt.xlabel("Tiempo")
+plt.ylabel("Población")
+plt.title("Sensibilidad del modelo logístico respecto a r")
+plt.legend()
+plt.grid()
+
+plt.show()
+
+
+
+
+
+
